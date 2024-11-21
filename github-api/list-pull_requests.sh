@@ -25,13 +25,13 @@ function list_number_of_pull_requests_in_repo {
     local endpoint="repos/${REPO_OWNER}/${REPO_NAME}/pulls"
 
     # Fetch the list of collaborators on the repository
-    pulls="$(github_api_get "$endpoint")"
+    pulls="$(github_api_get "$endpoint" | jq -r '.[] | .title, .state')"
 
     # Display the list of collaborators with read access
     if [[ -z "$pulls" ]]; then
         echo "No pull requests found for ${REPO_OWNER}/${REPO_NAME}."
     else
-        echo "pulls requests for ${REPO_OWNER}/${REPO_NAME}:"
+        echo "pull requests for ${REPO_OWNER}/${REPO_NAME}:"
         echo "$pulls"
     fi
 }
@@ -39,4 +39,4 @@ function list_number_of_pull_requests_in_repo {
 # Main script
 
 echo "Number of pulls happened for ${REPO_OWNER}/${REPO_NAME}..."
-list_number_of pull_requests_in_repo
+list_number_of_pull_requests_in_repo
